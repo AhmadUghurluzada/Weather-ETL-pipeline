@@ -15,7 +15,7 @@ params = {
         "temperature_2m_min"
     ],
     "timezone": "auto",
-    "start_date": "2025-12-10",
+    "start_date": "2025-11-01",
     "end_date": "2025-12-25"
 }
 
@@ -40,3 +40,4 @@ if __name__ == "__main__":
     data = extract_data()
     with open("data/raw/weather_data.json", "w") as f:
         json.dump(data, f)
+        print("Data successfully extracted and saved to weather_data.json")

@@ -21,7 +21,7 @@ def transform_data(raw_data):
     df = pd.DataFrame(raw_data["daily"])
     df["time"] = pd.to_datetime(df["time"])
     df.set_index("time", inplace=True)
-    
+
     df = df.rename(columns={
         "sunrise": "sunrise_time",
         "precipitation_sum": "precipitation_mm",
@@ -30,17 +30,20 @@ def transform_data(raw_data):
         "weather_code": "weather_code"
     })
     
-
+    
+    # Detect missing values
     if df.isna().values.any():
         print("Warning: Missing values detected in the dataset.")
         print(df.isna().sum())
 
-    
+
+    # Ensure no duplicate indices. API response may contain overlapping dates.
     if df.index.duplicated().any():
         print("Warning: Duplicate indices detected. Removing duplicates.")
         df = df[~df.index.duplicated(keep='first')]
 
-    
+
+    # Validate basic physical constraints of the data
     assert (df["temp_max_c"] >= df["temp_min_c"]).all(), "Invalid temperature range"
     assert (df["precipitation_mm"] >= 0).all(), "Negative precipitation detected"
 
